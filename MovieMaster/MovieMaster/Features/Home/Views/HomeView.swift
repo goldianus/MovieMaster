@@ -8,29 +8,32 @@
 import SwiftUI
 
 struct HomeView: View {
-  @StateObject var viewModel: MoviesViewModel
+  @State private var showMainView = false
+  @State private var isLogoAnimated = false
   
   var body: some View {
+    let dataProvider = MovieService()
+    let viewModel = MoviesViewModel(movieService: dataProvider)
+    
     NavigationView {
-      Group {
-        if viewModel.isLoading {
-          // Progress view
-        } else {
-          List(viewModel.movies) { movie in
+      ScrollView(.vertical, showsIndicators: false) {
+        VStack() {
+          ForEach (viewModel.movies, id: \.self.id) { movie in
             MovieRowView(movie: movie)
           }
         }
       }
       .navigationTitle("Now Playing")
-      .alert("Error", isPresented: Binding(
-        get: { viewModel.error != nil },
-        set: { if !$0 { viewModel.error = nil } }
-      )) {
-        Text(viewModel.error?.localizedDescription ?? "")
-      }
+      
     }
     .onAppear {
-      viewModel.fetchNowPlaying()
+      withAnimation(.easeInOut(duration: 1.5)) {
+        isLogoAnimated.toggle()
+      }
+      
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        showMainView = true
+      }
     }
   }
 }

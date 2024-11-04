@@ -10,9 +10,8 @@ import Combine
 
 class MoviesViewModel: ObservableObject {
   @Published var movies: [Movie] = []
-  @Published var isLoading = false
   @Published var error: MovieError?
-  
+  @Published var isLoading = false
   @Published var currentPage = 1
   @Published var totalPages = 1
   
