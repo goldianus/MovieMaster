@@ -8,59 +8,34 @@
 import Foundation
 
 // MARK: - NowPlayingMoviesModel
-struct NowPlayingMoviesModel: Codable {
-  var dates: Dates
-  var page: Int
-  var results: [Result]
-  var totalPages: Int
-  var totalResults: Int
+struct NowPlayingResponse: Codable {
+  let page: Int
+  let results: [Movie]
+  let totalPages: Int
+  let totalResults: Int
   
   enum CodingKeys: String, CodingKey {
-    case dates
-    case page
-    case results
+    case page, results
     case totalPages = "total_pages"
     case totalResults = "total_results"
   }
 }
 
-// MARK: - Dates
-struct Dates: Codable {
-  var maximum: String
-  var minimum: String
-}
-
-// MARK: - Result
-struct Result: Codable {
-  var adult: Bool
-  var backdropPath: String
-  var genreIDS: [Int]
-  var id: Int
-  var originalLanguage: String
-  var originalTitle: String
-  var overview: String
-  var popularity: Double
-  var posterPath: String
-  var releaseDate: String
-  var title: String
-  var video: Bool
-  var voteAverage: Double
-  var voteCount: Int
+struct Movie: Codable, Identifiable {
+  let id: Int
+  let title: String
+  let overview: String
+  let posterPath: String?
+  let backdropPath: String?
+  let releaseDate: String
+  let voteAverage: Double
   
   enum CodingKeys: String, CodingKey {
-    case adult
-    case backdropPath = "backdrop_path"
-    case genreIDS = "genre_ids"
-    case id
-    case originalLanguage = "original_language"
-    case originalTitle = "original_title"
-    case overview, popularity
+    case id, title, overview
     case posterPath = "poster_path"
+    case backdropPath = "backdrop_path"
     case releaseDate = "release_date"
-    case title
-    case video
     case voteAverage = "vote_average"
-    case voteCount = "vote_count"
   }
 }
 

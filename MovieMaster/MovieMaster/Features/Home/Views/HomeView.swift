@@ -7,17 +7,18 @@
 
 import SwiftUI
 
-
 struct HomeView: View {
-  @StateObject private var viewModel = MoviesViewModel()
+  @StateObject var viewModel: MoviesViewModel
   
   var body: some View {
     NavigationView {
       Group {
         if viewModel.isLoading {
-          //          Text("Progress View")
+          // Progress view
         } else {
-          Text("Content View")
+          List(viewModel.movies) { movie in
+            MovieRowView(movie: movie)
+          }
         }
       }
       .navigationTitle("Now Playing")
@@ -35,5 +36,15 @@ struct HomeView: View {
 }
 
 #Preview {
-  HomeView()
+  MovieRowView(movie: Movie(
+    id: 1,
+    title: "Sample Movie",
+    overview: "This is a sample movie description that might be long enough to demonstrate line limiting.",
+    posterPath: nil,
+    backdropPath: nil,
+    releaseDate: "2024-01-01",
+    voteAverage: 8.5
+  ))
+  .previewLayout(.sizeThatFits)
+  .padding()
 }

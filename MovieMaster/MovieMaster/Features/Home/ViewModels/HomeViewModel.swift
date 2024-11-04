@@ -9,16 +9,17 @@ import Foundation
 import Combine
 
 class MoviesViewModel: ObservableObject {
-  @Published private(set) var movies: [Result] = []
+  @Published var movies: [Movie] = []
   @Published var isLoading = false
   @Published var error: MovieError?
-  @Published var currentPage: Int = 1
-  @Published var totalPages: Int = 1
   
-  private var movieService = MovieService()
+  @Published var currentPage = 1
+  @Published var totalPages = 1
+  
+  private let movieService: MovieServiceProtocol
   private var cancellables = Set<AnyCancellable>()
   
-  init(movieService: MovieService = MovieService()) {
+  init(movieService: MovieServiceProtocol) {
     self.movieService = movieService
   }
   
@@ -40,17 +41,10 @@ class MoviesViewModel: ObservableObject {
           self?.movies = []
           print("Error: \(error.localizedDescription)")
         }
-      } receiveValue: { [weak self] nowPlayingMovies in
-      
+      } receiveValue: { [weak self] response in
+        self?.movies = response.results
+        print("Received movies: \(response.results.count)")
       }
       .store(in: &cancellables)
-  }
-  
-  func retry() {
-    fetchNowPlaying()
-  }
-  
-  func clearError() {
-    error = nil
   }
 }
