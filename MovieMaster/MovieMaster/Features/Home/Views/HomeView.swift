@@ -10,21 +10,26 @@ import SwiftUI
 struct HomeView: View {
   @State private var showMainView = false
   @State private var isLogoAnimated = false
+  @StateObject private var viewModel = MoviesViewModel(movieService: MovieService())
   
   var body: some View {
-    let dataProvider = MovieService()
-    let viewModel = MoviesViewModel(movieService: dataProvider)
-    
     NavigationView {
       ScrollView(.vertical, showsIndicators: false) {
-        VStack() {
-          ForEach (viewModel.movies, id: \.self.id) { movie in
+        VStack {
+          ForEach(viewModel.movies, id: \.id) { movie in
             MovieRowView(movie: movie)
+              .padding()
           }
         }
       }
+      .refreshable {
+        viewModel.fetchNowPlaying()
+      }
+      .background(.clear)
+      .onAppear {
+        viewModel.fetchNowPlaying()
+      }
       .navigationTitle("Now Playing")
-      
     }
     .onAppear {
       withAnimation(.easeInOut(duration: 1.5)) {
@@ -37,6 +42,7 @@ struct HomeView: View {
     }
   }
 }
+
 
 #Preview {
   MovieRowView(movie: Movie(

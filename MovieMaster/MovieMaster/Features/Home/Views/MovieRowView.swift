@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MovieRowView: View {
-  let movie: Movie
+  var movie: Movie
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {

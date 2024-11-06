@@ -15,7 +15,7 @@ class MoviesViewModel: ObservableObject {
   @Published var currentPage = 1
   @Published var totalPages = 1
   
-  private let movieService: MovieServiceProtocol
+  let movieService: MovieServiceProtocol
   private var cancellables = Set<AnyCancellable>()
   
   init(movieService: MovieServiceProtocol) {
@@ -41,7 +41,10 @@ class MoviesViewModel: ObservableObject {
           print("Error: \(error.localizedDescription)")
         }
       } receiveValue: { [weak self] response in
-        self?.movies = response.results
+        guard let self = self  else { return }
+        self.movies = response.results
+        self.totalPages = response.totalPages
+        self.isLoading = false
         print("Received movies: \(response.results.count)")
       }
       .store(in: &cancellables)

@@ -39,25 +39,25 @@ enum MovieEndpoint: APIEndpoint {
   var path: String {
     switch self {
     case .getNowPlayingMoviesList:
-      return "movie/now_playing?api_key="
+      return "movie/now_playing"
     case .getPopularList:
-      return "movie/popular?api_key="
+      return "movie/popular"
     }
   }
   
   var method: HTTPMethod {
     switch self {
-    case .getNowPlayingMoviesList:
-      return .get
-    case .getPopularList:
+    default:
       return .get
     }
   }
   
   var headers: [String : String]? {
     switch self {
-    case .getNowPlayingMoviesList, .getPopularList:
+    case .getNowPlayingMoviesList:
       return ["Content-Type": "application/x-www-form-urlencoded"]
+    case .getPopularList:
+      return [:]
     }
   }
   
