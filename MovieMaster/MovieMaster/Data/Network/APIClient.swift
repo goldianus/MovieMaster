@@ -16,7 +16,6 @@ protocol MovieServiceProtocol {
 class MovieService: MovieServiceProtocol {
   private let apiClient: URLSessionAPIClient<MovieEndpoint>
   private let session: URLSession
-  private let imagePath = "https://image.tmdb.org/t/p/original"
   
   init(
     apiClient: URLSessionAPIClient<MovieEndpoint> = URLSessionAPIClient(),
