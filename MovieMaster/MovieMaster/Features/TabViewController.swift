@@ -19,9 +19,9 @@ struct TabViewController: View {
           Label("Home", systemImage: "house.circle.fill")
         }
       
-      HomeView()
+      ExploreView()
         .tabItem {
-          Label("Notification", systemImage: "bell.circle.fill")
+          Label("Explore", systemImage: "bell.circle.fill")
         }
     }
     .onAppear {
