@@ -28,7 +28,6 @@ struct TabViewController: View {
       let appearance = UITabBarAppearance()
       appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
       appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.lightGray]
-      
       UITabBar.appearance().standardAppearance = appearance
       UITabBar.appearance().scrollEdgeAppearance = appearance
     }

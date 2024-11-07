@@ -43,7 +43,6 @@ struct HomeView: View {
   }
 }
 
-
 #Preview {
   MovieRowView(movie: Movie(
     id: 1,

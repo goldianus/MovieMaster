@@ -8,8 +8,8 @@
 import SwiftUI
 import SwiftData
 
-//@main
-//struct MovieMasterApp: App {
+// @main
+// struct MovieMasterApp: App {
 //    var sharedModelContainer: ModelContainer = {
 //        let schema = Schema([
 //            Item.self,
@@ -29,8 +29,7 @@ import SwiftData
 //        }
 //        .modelContainer(sharedModelContainer)
 //    }
-//}
-
+// }
 
 @main
 struct MovieMasterApp: App {

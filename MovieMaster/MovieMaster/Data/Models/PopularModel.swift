@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 // MARK: - PopularMovies
 public struct PopularMoviesResponse: Codable {
   public let page: Int?

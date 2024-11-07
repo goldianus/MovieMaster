@@ -52,7 +52,7 @@ enum MovieEndpoint: APIEndpoint {
     }
   }
   
-  var headers: [String : String]? {
+  var headers: [String: String]? {
     switch self {
     case .getNowPlayingMoviesList:
       return ["Content-Type": "application/x-www-form-urlencoded"]
@@ -61,7 +61,7 @@ enum MovieEndpoint: APIEndpoint {
     }
   }
   
-  var parameters: [String : Any]? {
+  var parameters: [String: Any]? {
     switch self {
     case .getNowPlayingMoviesList:
       return nil

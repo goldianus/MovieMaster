@@ -39,7 +39,6 @@ struct Movie: Codable, Identifiable {
   }
 }
 
-
 enum MovieError: LocalizedError {
   case failedToLoadMovies
   case invalidResponse
