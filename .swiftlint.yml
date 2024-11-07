@@ -1,44 +1,39 @@
 disabled_rules: # rule identifiers to exclude from running
-- trailing_whitespace
-
-# Find all the available rules by running:
-# swiftlint rules
-
+  - variable_name
+  - nesting
+  - function_parameter_count
+  - file_length
+  - line_length
+  - type_body_length
+  - function_body_length
+  - type_name
+  - shorthand_operator
+  - large_tuple
+  - trailing_comma
+  
+opt_in_rules: # some rules are only opt-in
+  - control_statement
+  - colon
+  - comma
 included: # paths to include during linting. `--path` is ignored if present.
-
-#type name
-type_name:
-    min_length: 2
-    max_length:
-        warning: 50
-        error: 100
-    allowed_symbols: "_"
-    
-#identifier name
-identifier_name:
-    min_length: 2
-    max_length:
-        warning: 50
-        error: 100
-    allowed_symbols: "_"
-
-#large tuple starts when number of parameters > 4
-large_tuple: 4
-
-# parameterized rules can be customized from this configuration file
-line_length: 256
-
-function_parameter_count:
-- 30
-- 40
-
-# parameterized rules are first parameterized as a warning level, then error level.
-type_body_length:
-- 500 # warning
-- 1000 # error
-
-#reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
-
+  - calculator
 excluded: # paths to ignore during linting. Takes precedence over `included`.
-- Pods
-- SwiftLint/Common/3rdPartyLib
+  - Pods
+  - Project/R.generated.swift
+
+# configurable rules can be customized from this configuration file
+# binary rules can s.et their severity level
+force_cast: warning # implicitly. Give warning only for force casting
+
+force_try:
+  severity: warning # explicitly. Give warning only for force try
+
+# naming rules can set warnings/errors for min_length and max_length
+# additionally they can set excluded names
+type_name:
+  min_length: 4 # only warning
+  max_length: # warning and error
+    warning: 30
+    error: 35
+  excluded: iPhone # excluded via string
+reporter: "xcode"
