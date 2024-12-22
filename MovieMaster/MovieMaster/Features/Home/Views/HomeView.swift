@@ -19,21 +19,30 @@ struct HomeView: View {
   var body: some View {
     NavigationView {
       ScrollView(.vertical, showsIndicators: false) {
-        VStack {
-          ForEach(viewModel.movies, id: \.id) { movie in
-            MovieRowView(movie: movie)
-              .padding()
-          }
+        VStack(alignment: .leading, spacing: 20) {
+          // Now Playing Section
+          HomeMovieCarouselSection(
+            title: "Now Playing",
+            movies: viewModel.nowPlayingMovies
+          )
+          
+          // Popular Movies Section
+          HomeMovieCarouselSection(
+            title: "Popular",
+            movies: viewModel.popularMovies
+          )
         }
+        .padding()
       }
+      
       .refreshable {
-        viewModel.fetchNowPlaying()
+        viewModel.fetchAllMovies()
       }
       .background(.clear)
       .onAppear {
-        viewModel.fetchNowPlaying()
+        viewModel.fetchAllMovies()
       }
-      .navigationTitle("Now Playing")
+      .navigationTitle("Movie Time")
     }
     .onAppear {
       withAnimation(.easeInOut(duration: 1.5)) {
@@ -48,15 +57,5 @@ struct HomeView: View {
 }
 
 #Preview {
-  MovieRowView(movie: Movie(
-    id: 1,
-    title: "Sample Movie",
-    overview: "This is a sample movie description that might be long enough to demonstrate line limiting.",
-    posterPath: nil,
-    backdropPath: nil,
-    releaseDate: "2024-01-01",
-    voteAverage: 8.5
-  ))
-  .previewLayout(.sizeThatFits)
-  .padding()
+  HomeView()
 }

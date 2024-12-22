@@ -9,7 +9,9 @@ import Foundation
 import Combine
 
 class MoviesViewModel: ObservableObject {
-  @Published var movies: [Movie] = []
+  @Published var nowPlayingMovies: [Movie] = []
+  @Published var popularMovies: [Movie] = []
+  @Published var newMovies: [Movie] = []
   @Published var error: MovieError?
   @Published var isLoading = false
   @Published var currentPage = 1
@@ -24,29 +26,38 @@ class MoviesViewModel: ObservableObject {
   
   func fetchNowPlaying() {
     guard !isLoading else { return }
-    
     isLoading = true
-    error = nil
     
     interactor.getNowPlaying()
       .receive(on: DispatchQueue.main)
       .sink { [weak self] completion in
         self?.isLoading = false
-        switch completion {
-        case .finished:
-          break
-        case .failure(let error):
+        if case .failure = completion {
           self?.error = .failedToLoadMovies
-          self?.movies = []
-          print("Error: \(error.localizedDescription)")
         }
       } receiveValue: { [weak self] response in
-        guard let self = self else { return }
-        self.movies = response.results
-        self.totalPages = response.totalPages
-        self.isLoading = false
-        print("Received movies: \(response.results.count)")
+        self?.totalPages = response.totalPages
+        self?.nowPlayingMovies = response.results
       }
       .store(in: &cancellables)
+  }
+  
+  func fetchPopularMovies() {
+    interactor.getNowPlaying()
+      .receive(on: DispatchQueue.main)
+      .sink { [weak self] completion in
+        if case .failure = completion {
+          self?.error = .failedToLoadMovies
+        }
+      } receiveValue: { [weak self] response in
+        self?.totalPages = response.totalPages
+        self?.popularMovies = response.results
+      }
+      .store(in: &cancellables)
+  }
+  
+  func fetchAllMovies() {
+    fetchNowPlaying()
+    fetchPopularMovies()
   }
 }
