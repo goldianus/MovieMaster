@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct MovieResponse {
+  let results: [Movie]
+  let totalPages: Int
+}

@@ -15,11 +15,11 @@ class MoviesViewModel: ObservableObject {
   @Published var currentPage = 1
   @Published var totalPages = 1
   
-  let movieService: MovieServiceProtocol
+  private let interactor: MovieInteractor
   private var cancellables = Set<AnyCancellable>()
   
-  init(movieService: MovieServiceProtocol) {
-    self.movieService = movieService
+  init(interactor: MovieInteractor) {
+    self.interactor = interactor
   }
   
   func fetchNowPlaying() {
@@ -28,7 +28,7 @@ class MoviesViewModel: ObservableObject {
     isLoading = true
     error = nil
     
-    movieService.getNowPlaying()
+    interactor.getNowPlaying()
       .receive(on: DispatchQueue.main)
       .sink { [weak self] completion in
         self?.isLoading = false
@@ -41,7 +41,7 @@ class MoviesViewModel: ObservableObject {
           print("Error: \(error.localizedDescription)")
         }
       } receiveValue: { [weak self] response in
-        guard let self = self  else { return }
+        guard let self = self else { return }
         self.movies = response.results
         self.totalPages = response.totalPages
         self.isLoading = false

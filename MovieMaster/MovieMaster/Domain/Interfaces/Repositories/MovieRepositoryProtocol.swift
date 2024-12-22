@@ -6,3 +6,8 @@
 //
 
 import Foundation
+import Combine
+
+protocol MovieRepositoryProtocol {
+  func getNowPlaying() -> AnyPublisher<MovieResponse, Error>
+}

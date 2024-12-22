@@ -10,7 +10,11 @@ import SwiftUI
 struct HomeView: View {
   @State private var showMainView = false
   @State private var isLogoAnimated = false
-  @StateObject private var viewModel = MoviesViewModel(movieService: MovieService())
+  @StateObject private var viewModel: MoviesViewModel
+  
+  init(viewModel: MoviesViewModel = Injection.shared.provideMoviesViewModel()) {
+    _viewModel = StateObject(wrappedValue: viewModel)
+  }
   
   var body: some View {
     NavigationView {
