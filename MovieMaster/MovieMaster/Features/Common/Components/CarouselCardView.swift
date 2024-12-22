@@ -22,7 +22,7 @@ struct CarouselCardView: View {
   
   @ViewBuilder
   func popularImageView() -> some View {
-    let imgUrl = URL(string: "\(imagePath)" + "\(movie.posterPath )")
+    let imgUrl = URL(string: "\(APIConstants.baseImageURL)" + "\(movie.posterPath )")
     CustomSDWebImageView(imgURL: imgUrl,
                          imgWidth: 200,
                          imgHeight: 260,
