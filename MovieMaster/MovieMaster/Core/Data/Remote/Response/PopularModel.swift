@@ -51,7 +51,7 @@ public struct ResultPopular: Codable {
 }
 
 public enum OriginalLanguage: String, Codable {
-  case en = "en"
-  case fr = "fr"
-  case tl = "tl"
+  case en
+  case fr
+  case tl
 }
