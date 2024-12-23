@@ -10,8 +10,9 @@ import Foundation
 // MARK: - PopularMovies
 public struct PopularMoviesResponse: Codable {
   public let page: Int?
-  public let results: [ResultPopular]?
-  public let totalPages, totalResults: Int?
+  public let results: [ResultPopular]
+  public let totalPages: Int
+  public let totalResults: Int
   
   enum CodingKeys: String, CodingKey {
     case page, results

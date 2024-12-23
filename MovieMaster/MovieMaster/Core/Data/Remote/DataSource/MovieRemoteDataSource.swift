@@ -10,9 +10,11 @@ import Combine
 
 protocol MovieRemoteDataSource {
   func getNowPlaying() -> AnyPublisher<MovieResponse, Error>
+  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, Error>
 }
 
 class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
+  
   private let apiClient: MovieServiceProtocol
   
   init(apiClient: MovieServiceProtocol) {
@@ -23,6 +25,20 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
     return apiClient.getNowPlaying()
       .map(mapToMovieResponse)
       .eraseToAnyPublisher()
+  }
+  
+  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, Error> {
+    return apiClient.getPopular()
+      .map(mapToPopularResponse)
+      .eraseToAnyPublisher()
+  }
+  
+  private func mapToPopularResponse(_ response: PopularMoviesResponse) -> MoviePopularMoviesResponse {
+    let movies = response.results.compactMap(mapToPopular)
+    return MoviePopularMoviesResponse(
+      result: movies,
+      totalPage: response.totalPages
+    )
   }
   
   private func mapToMovieResponse(_ response: NowPlayingResponse) -> MovieResponse {
@@ -42,6 +58,25 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
       backdropPath: result.backdropPath ?? "",
       releaseDate: result.releaseDate,
       voteAverage: result.voteAverage
+    )
+  }
+  
+  private func mapToPopular(_ result: ResultPopular) -> ResultPopular? {
+    return ResultPopular(
+      adult: result.adult,
+      backdropPath: result.backdropPath,
+      genreIDS: result.genreIDS,
+      id: result.id,
+      originalLanguage: result.originalLanguage,
+      originalTitle: result.originalTitle,
+      overview: result.overview,
+      popularity: result.popularity,
+      posterPath: result.posterPath,
+      releaseDate: result.releaseDate,
+      title: result.title,
+      video: result.video,
+      voteAverage: result.voteAverage,
+      voteCount: result.voteCount
     )
   }
 }

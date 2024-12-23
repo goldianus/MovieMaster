@@ -10,9 +10,11 @@ import Combine
 
 protocol MovieInteractor {
   func getNowPlaying() -> AnyPublisher<MovieResponse, Error>
+  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, Error>
 }
 
 class DefaultMovieInteractor: MovieInteractor {
+  
   private let repository: MovieRepositoryProtocol
   
   init(repository: MovieRepositoryProtocol) {
@@ -22,4 +24,9 @@ class DefaultMovieInteractor: MovieInteractor {
   func getNowPlaying() -> AnyPublisher<MovieResponse, Error> {
     return repository.getNowPlaying()
   }
+  
+  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, any Error> {
+    return repository.getPopular()
+  }
+  
 }

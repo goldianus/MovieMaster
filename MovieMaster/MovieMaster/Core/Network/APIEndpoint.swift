@@ -57,7 +57,7 @@ enum MovieEndpoint: APIEndpoint {
     case .getNowPlayingMoviesList:
       return ["Content-Type": "application/x-www-form-urlencoded"]
     case .getPopularList:
-      return [:]
+      return ["Content-Type": "application/x-www-form-urlencoded"]
     }
   }
   

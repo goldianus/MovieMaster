@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 class MovieRepository: MovieRepositoryProtocol {
+
   private let remoteDataSource: MovieRemoteDataSource
   
   init(remoteDataSource: MovieRemoteDataSource) {
@@ -18,4 +19,9 @@ class MovieRepository: MovieRepositoryProtocol {
   func getNowPlaying() -> AnyPublisher<MovieResponse, Error> {
     return remoteDataSource.getNowPlaying()
   }
+  
+  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, any Error> {
+    return remoteDataSource.getPopular()
+  }
+  
 }

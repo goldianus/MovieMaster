@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-enum TabItem: Int {
-  case home, notification
-}
-
 struct TabViewController: View {
   var body: some View {
     TabView {

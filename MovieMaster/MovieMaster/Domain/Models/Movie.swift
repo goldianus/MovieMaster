@@ -11,3 +11,8 @@ struct MovieResponse {
   let results: [Movie]
   let totalPages: Int
 }
+
+struct MoviePopularMoviesResponse {
+  let result: [ResultPopular]
+  let totalPage: Int
+}

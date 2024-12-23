@@ -7,9 +7,39 @@
 
 import SwiftUI
 
-struct HomeMovieCarouselSection: View {
+protocol MovieDisplayable {
+  var movieId: Int { get }
+  var movieTitle: String { get }
+  var movieOverview: String { get }
+  var moviePosterPath: String? { get }
+  var movieBackdropPath: String? { get }
+  var movieReleaseDate: String { get }
+  var movieVoteAverage: Double { get }
+}
+
+extension Movie: MovieDisplayable {
+  var movieId: Int { id }
+  var movieTitle: String { title }
+  var movieOverview: String { overview }
+  var moviePosterPath: String? { posterPath }
+  var movieBackdropPath: String? { backdropPath }
+  var movieReleaseDate: String { releaseDate }
+  var movieVoteAverage: Double { voteAverage }
+}
+
+extension ResultPopular: MovieDisplayable {
+  var movieId: Int { id ?? 0 }
+  var movieTitle: String { title ?? "" }
+  var movieOverview: String { overview ?? "" }
+  var moviePosterPath: String? { posterPath }
+  var movieBackdropPath: String? { backdropPath }
+  var movieReleaseDate: String { releaseDate ?? "" }
+  var movieVoteAverage: Double { voteAverage ?? 0.0 }
+}
+
+struct HomeMovieCarouselSection<T: MovieDisplayable>: View {
   let title: String
-  let movies: [Movie]
+  let movies: [T]
   
   var body: some View {
     VStack(alignment: .leading, spacing: 10) {
@@ -19,8 +49,16 @@ struct HomeMovieCarouselSection: View {
       
       ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: 15) {
-          ForEach(movies) { movie in
-            MovieRowView(movie: movie)
+          ForEach(movies, id: \.movieId) { movie in
+            MovieRowView(movie: Movie(
+              id: movie.movieId,
+              title: movie.movieTitle,
+              overview: movie.movieOverview,
+              posterPath: movie.moviePosterPath,
+              backdropPath: movie.movieBackdropPath,
+              releaseDate: movie.movieReleaseDate,
+              voteAverage: movie.movieVoteAverage
+            ))
           }
         }
       }
