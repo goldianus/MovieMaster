@@ -14,7 +14,7 @@ protocol APIClient {
 }
 
 class URLSessionAPIClient<EndpointType: APIEndpoint>: APIClient {
-  private let apiKey = "ad48d4f1d762c9dd901b53cef31dd8bb"
+  private let apiKey = "ENTER_YOUR_API_KEY"
   
   func request<T: Decodable>(_ endpoint: EndpointType) -> AnyPublisher<T, Error> {
     var urlComponents = URLComponents(url: endpoint.baseURL.appendingPathComponent(endpoint.path), resolvingAgainstBaseURL: false)

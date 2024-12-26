@@ -10,5 +10,5 @@ import Combine
 
 protocol MovieRepositoryProtocol {
   func getNowPlaying() -> AnyPublisher<MovieResponse, Error>
-  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, Error>
+  func getPopular() -> AnyPublisher<PopularMoviesResponse, Error>
 }

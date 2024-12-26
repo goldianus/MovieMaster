@@ -10,24 +10,26 @@ import Foundation
 // MARK: - Popular
 struct Popular: Codable {
   var page: Int
-  var results: [Result]
+  var results: [PopularResult]
   var totalPages, totalResults: Int
   
   enum CodingKeys: String, CodingKey {
-    case page, results
+    case page
+    case results
     case totalPages = "total_pages"
     case totalResults = "total_results"
   }
 }
 
 // MARK: - Result
-struct Result: Codable {
+struct PopularResult: Codable {
   var adult: Bool
   var backdropPath: String
   var genreIDS: [Int]
   var id: Int
   var originalLanguage: OriginalLanguage
-  var originalTitle, overview: String
+  var originalTitle: String
+  var overview: String
   var popularity: Double
   var posterPath, releaseDate, title: String
   var video: Bool

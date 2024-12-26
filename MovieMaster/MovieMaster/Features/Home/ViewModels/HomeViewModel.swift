@@ -10,7 +10,7 @@ import Combine
 
 class MoviesViewModel: ObservableObject {
   @Published var nowPlayingMovies: [Movie] = []
-  @Published var popularMovies: [Result] = []
+  @Published var popularMovies: [PopularResult] = []
   @Published var error: MovieError?
   @Published var isLoading = false
   @Published var currentPage = 1
@@ -42,16 +42,27 @@ class MoviesViewModel: ObservableObject {
   }
   
   func fetchPopularMovies() {
+    guard !isLoading else { return }
+    isLoading = true
+    
     interactor.getPopular()
       .receive(on: DispatchQueue.main)
       .sink { [weak self] completion in
-        if case .failure = completion {
+        self?.isLoading = false
+        if case .failure(let error) = completion {
           self?.error = .failedToLoadMovies
+          print("Popular movies error: \(error)")
         }
       } receiveValue: { [weak self] response in
         guard let self = self else { return }
-        self.totalPages = response.totalPage
-        self.popularMovies = response.result
+        
+        self.popularMovies = response.results
+        
+//        if !response.results.isEmpty {
+//          self.popularMovies = response.results
+//          self.totalPages = response.totalPage
+//          print("Received popular movies count: \(response.results.count)")
+//        }
       }
       .store(in: &cancellables)
   }

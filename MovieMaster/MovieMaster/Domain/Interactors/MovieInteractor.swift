@@ -10,7 +10,7 @@ import Combine
 
 protocol MovieInteractor {
   func getNowPlaying() -> AnyPublisher<MovieResponse, Error>
-  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, Error>
+  func getPopular() -> AnyPublisher<PopularMoviesResponse, Error>
 }
 
 class DefaultMovieInteractor: MovieInteractor {
@@ -25,7 +25,7 @@ class DefaultMovieInteractor: MovieInteractor {
     return repository.getNowPlaying()
   }
   
-  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, any Error> {
+  func getPopular() -> AnyPublisher<PopularMoviesResponse, any Error> {
     return repository.getPopular()
   }
   

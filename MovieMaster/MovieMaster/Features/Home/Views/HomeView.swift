@@ -25,7 +25,7 @@ struct HomeView: View {
             movies: viewModel.nowPlayingMovies
           )
           
-          HomeMovieCarouselSection<Result>(
+          HomeMovieCarouselSection<PopularResult>(
             title: "Popular",
             movies: viewModel.popularMovies
           )

@@ -20,7 +20,7 @@ class MovieRepository: MovieRepositoryProtocol {
     return remoteDataSource.getNowPlaying()
   }
   
-  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, any Error> {
+  func getPopular() -> AnyPublisher<PopularMoviesResponse, any Error> {
     return remoteDataSource.getPopular()
   }
   

@@ -10,7 +10,7 @@ import Combine
 
 protocol MovieRemoteDataSource {
   func getNowPlaying() -> AnyPublisher<MovieResponse, Error>
-  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, Error>
+  func getPopular() -> AnyPublisher<PopularMoviesResponse, Error>
 }
 
 class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
@@ -27,16 +27,16 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
       .eraseToAnyPublisher()
   }
   
-  func getPopular() -> AnyPublisher<MoviePopularMoviesResponse, Error> {
+  func getPopular() -> AnyPublisher<PopularMoviesResponse, Error> {
     return apiClient.getPopular()
       .map(mapToPopularResponse)
       .eraseToAnyPublisher()
   }
   
-  private func mapToPopularResponse(_ response: Popular) -> MoviePopularMoviesResponse {
+  private func mapToPopularResponse(_ response: Popular) -> PopularMoviesResponse {
     let movies = response.results.compactMap(mapToPopular)
-    return MoviePopularMoviesResponse(
-      result: movies,
+    return PopularMoviesResponse(
+      results: movies,
       totalPage: response.totalPages
     )
   }
@@ -61,8 +61,8 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
     )
   }
   
-  private func mapToPopular(_ result: Result) -> Result? {
-    return Result(
+  private func mapToPopular(_ result: PopularResult) -> PopularResult? {
+    return PopularResult(
       adult: result.adult,
       backdropPath: result.backdropPath,
       genreIDS: result.genreIDS,
