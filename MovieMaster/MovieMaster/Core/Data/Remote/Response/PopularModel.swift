@@ -7,12 +7,11 @@
 
 import Foundation
 
-// MARK: - PopularMovies
-public struct PopularMoviesResponse: Codable {
-  public let page: Int?
-  public let results: [ResultPopular]
-  public let totalPages: Int
-  public let totalResults: Int
+// MARK: - Popular
+struct Popular: Codable {
+  var page: Int
+  var results: [Result]
+  var totalPages, totalResults: Int
   
   enum CodingKeys: String, CodingKey {
     case page, results
@@ -22,18 +21,18 @@ public struct PopularMoviesResponse: Codable {
 }
 
 // MARK: - Result
-public struct ResultPopular: Codable {
-  public let adult: Bool?
-  public let backdropPath: String?
-  public let genreIDS: [Int]?
-  public let id: Int?
-  public let originalLanguage: OriginalLanguage?
-  public let originalTitle, overview: String?
-  public let popularity: Double?
-  public let posterPath, releaseDate, title: String?
-  public let video: Bool?
-  public let voteAverage: Double?
-  public let voteCount: Int?
+struct Result: Codable {
+  var adult: Bool
+  var backdropPath: String
+  var genreIDS: [Int]
+  var id: Int
+  var originalLanguage: OriginalLanguage
+  var originalTitle, overview: String
+  var popularity: Double
+  var posterPath, releaseDate, title: String
+  var video: Bool
+  var voteAverage: Double
+  var voteCount: Int
   
   enum CodingKeys: String, CodingKey {
     case adult

@@ -20,14 +20,12 @@ struct HomeView: View {
     NavigationView {
       ScrollView(.vertical, showsIndicators: false) {
         VStack(alignment: .leading, spacing: 20) {
-          // Now Playing section with Movie type
           HomeMovieCarouselSection<Movie>(
             title: "Now Playing",
             movies: viewModel.nowPlayingMovies
           )
           
-          // Popular section with ResultPopular type
-          HomeMovieCarouselSection<ResultPopular>(
+          HomeMovieCarouselSection<Result>(
             title: "Popular",
             movies: viewModel.popularMovies
           )

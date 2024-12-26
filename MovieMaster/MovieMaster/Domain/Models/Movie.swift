@@ -13,6 +13,6 @@ struct MovieResponse {
 }
 
 struct MoviePopularMoviesResponse {
-  let result: [ResultPopular]
+  let result: [Result]
   let totalPage: Int
 }

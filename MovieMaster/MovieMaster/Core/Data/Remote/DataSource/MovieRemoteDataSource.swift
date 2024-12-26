@@ -33,7 +33,7 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
       .eraseToAnyPublisher()
   }
   
-  private func mapToPopularResponse(_ response: PopularMoviesResponse) -> MoviePopularMoviesResponse {
+  private func mapToPopularResponse(_ response: Popular) -> MoviePopularMoviesResponse {
     let movies = response.results.compactMap(mapToPopular)
     return MoviePopularMoviesResponse(
       result: movies,
@@ -61,8 +61,8 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
     )
   }
   
-  private func mapToPopular(_ result: ResultPopular) -> ResultPopular? {
-    return ResultPopular(
+  private func mapToPopular(_ result: Result) -> Result? {
+    return Result(
       adult: result.adult,
       backdropPath: result.backdropPath,
       genreIDS: result.genreIDS,

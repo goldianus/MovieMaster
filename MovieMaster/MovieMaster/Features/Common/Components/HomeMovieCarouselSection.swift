@@ -27,14 +27,14 @@ extension Movie: MovieDisplayable {
   var movieVoteAverage: Double { voteAverage }
 }
 
-extension ResultPopular: MovieDisplayable {
-  var movieId: Int { id ?? 0 }
-  var movieTitle: String { title ?? "" }
-  var movieOverview: String { overview ?? "" }
+extension Result: MovieDisplayable {
+  var movieId: Int { id }
+  var movieTitle: String { title }
+  var movieOverview: String { overview }
   var moviePosterPath: String? { posterPath }
   var movieBackdropPath: String? { backdropPath }
-  var movieReleaseDate: String { releaseDate ?? "" }
-  var movieVoteAverage: Double { voteAverage ?? 0.0 }
+  var movieReleaseDate: String { releaseDate }
+  var movieVoteAverage: Double { voteAverage }
 }
 
 struct HomeMovieCarouselSection<T: MovieDisplayable>: View {

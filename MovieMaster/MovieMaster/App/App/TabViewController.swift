@@ -6,11 +6,21 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct TabViewController: View {
+  @State private var showNetworkLogs = false
+  
   var body: some View {
     TabView {
       HomeView()
+        .onShake {
+          showNetworkLogs = true
+        }
+        .sheet(isPresented: $showNetworkLogs) {
+          NetworkLogView()
+        }
+      
         .tabItem {
           Label("Home", systemImage: "house.circle.fill")
         }

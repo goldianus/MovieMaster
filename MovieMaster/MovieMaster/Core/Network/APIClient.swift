@@ -10,7 +10,7 @@ import Combine
 
 protocol MovieServiceProtocol {
   func getNowPlaying() -> AnyPublisher<NowPlayingResponse, Error>
-  func getPopular() -> AnyPublisher<PopularMoviesResponse, Error>
+  func getPopular() -> AnyPublisher<Popular, Error>
 }
 
 class MovieService: MovieServiceProtocol {
@@ -29,7 +29,7 @@ class MovieService: MovieServiceProtocol {
     return apiClient.request(.getNowPlayingMoviesList)
   }
   
-  func getPopular() -> AnyPublisher<PopularMoviesResponse, Error> {
+  func getPopular() -> AnyPublisher<Popular, Error> {
     return apiClient.request(.getPopularList)
   }
 }

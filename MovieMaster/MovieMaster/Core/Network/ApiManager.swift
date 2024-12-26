@@ -14,7 +14,7 @@ protocol APIClient {
 }
 
 class URLSessionAPIClient<EndpointType: APIEndpoint>: APIClient {
-  private let apiKey = "ENTER_YOUR_API_KEY"
+  private let apiKey = "ad48d4f1d762c9dd901b53cef31dd8bb"
   
   func request<T: Decodable>(_ endpoint: EndpointType) -> AnyPublisher<T, Error> {
     var urlComponents = URLComponents(url: endpoint.baseURL.appendingPathComponent(endpoint.path), resolvingAgainstBaseURL: false)
@@ -26,24 +26,35 @@ class URLSessionAPIClient<EndpointType: APIEndpoint>: APIClient {
       return Fail(error: APIError.invalidResponse).eraseToAnyPublisher()
     }
     
-    print("Final URL: \(url)")
-    
     var request = URLRequest(url: url)
     request.httpMethod = endpoint.method.rawValue
     endpoint.headers?.forEach { request.addValue($0.value, forHTTPHeaderField: $0.key) }
-    print("Final Request: \(request)")
+    
+    // Log the request
+    NetworkLogger.log(request: request)
     
     return URLSession.shared.dataTaskPublisher(for: request)
       .subscribe(on: DispatchQueue.global(qos: .background))
       .tryMap { data, response -> Data in
+        // Log the response
+        NetworkLogger.log(response: response, data: data, error: nil)
+        
         guard let httpResponse = response as? HTTPURLResponse,
               (200...299).contains(httpResponse.statusCode) else {
-          throw APIError.invalidResponse
+          let error = APIError.invalidResponse
+          // Log error response
+          NetworkLogger.log(response: response, data: data, error: error)
+          throw error
         }
         return data
       }
       .receive(on: DispatchQueue.main)
       .decode(type: T.self, decoder: JSONDecoder())
+      .catch { error -> AnyPublisher<T, Error> in
+        // Log any decoding errors
+        NetworkLogger.log(response: nil, data: nil, error: error)
+        return Fail(error: error).eraseToAnyPublisher()
+      }
       .eraseToAnyPublisher()
   }
 }
