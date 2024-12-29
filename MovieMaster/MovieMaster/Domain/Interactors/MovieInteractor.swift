@@ -28,5 +28,4 @@ class DefaultMovieInteractor: MovieInteractor {
   func getPopular() -> AnyPublisher<PopularMoviesResponse, any Error> {
     return repository.getPopular()
   }
-  
 }

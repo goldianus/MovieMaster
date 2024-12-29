@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class MovieRepository: MovieRepositoryProtocol {
-
+  
   private let remoteDataSource: MovieRemoteDataSource
   
   init(remoteDataSource: MovieRemoteDataSource) {
@@ -22,6 +22,13 @@ class MovieRepository: MovieRepositoryProtocol {
   
   func getPopular() -> AnyPublisher<PopularMoviesResponse, any Error> {
     return remoteDataSource.getPopular()
+      .handleEvents(receiveSubscription: { _ in
+        Debug.log("[Repository] Fetching popular movies")
+      }, receiveCompletion: { completion in
+        if case .failure(let error) = completion {
+          Debug.log("[Repository] Error fetching popular movies: \(error)")
+        }
+      })
+      .eraseToAnyPublisher()
   }
-  
 }

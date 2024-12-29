@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class MoviesViewModel: ObservableObject {
+final class MoviesViewModel: ObservableObject {
   @Published var nowPlayingMovies: [Movie] = []
   @Published var popularMovies: [PopularResult] = []
   @Published var error: MovieError?
@@ -23,52 +23,58 @@ class MoviesViewModel: ObservableObject {
     self.interactor = interactor
   }
   
-  func fetchNowPlaying() {
+  // MARK: - Private Methods
+  private func fetchNowPlaying() {
     guard !isLoading else { return }
-    isLoading = true
+    setLoading(true)
     
     interactor.getNowPlaying()
       .receive(on: DispatchQueue.main)
-      .sink { [weak self] completion in
-        self?.isLoading = false
-        if case .failure = completion {
-          self?.error = .failedToLoadMovies
-        }
-      } receiveValue: { [weak self] response in
-        self?.totalPages = response.totalPages
-        self?.nowPlayingMovies = response.results
-      }
+      .sink(receiveCompletion: { [weak self] completion in
+        self?.handleCompletion(completion)
+      }, receiveValue: { [weak self] response in
+        self?.handleNowPlayingResponse(response)
+      })
       .store(in: &cancellables)
   }
   
-  func fetchPopularMovies() {
+  private func fetchPopularMovies() {
     guard !isLoading else { return }
-    isLoading = true
+    setLoading(true)
     
     interactor.getPopular()
       .receive(on: DispatchQueue.main)
-      .sink { [weak self] completion in
-        self?.isLoading = false
-        if case .failure(let error) = completion {
-          self?.error = .failedToLoadMovies
-          print("Popular movies error: \(error)")
-        }
-      } receiveValue: { [weak self] response in
-        guard let self = self else { return }
-        
-        self.popularMovies = response.results
-        
-//        if !response.results.isEmpty {
-//          self.popularMovies = response.results
-//          self.totalPages = response.totalPage
-//          print("Received popular movies count: \(response.results.count)")
-//        }
-      }
+      .sink(receiveCompletion: { [weak self] completion in
+        self?.handleCompletion(completion)
+      }, receiveValue: { [weak self] response in
+        self?.handlePopularResponse(response)
+      })
       .store(in: &cancellables)
   }
   
+  // MARK: - Helper Methods
+  private func setLoading(_ loading: Bool) {
+    isLoading = loading
+  }
+  
+  private func handleCompletion(_ completion: Subscribers.Completion<Error>) {
+    setLoading(false)
+    if case .failure = completion {
+      error = .failedToLoadMovies
+    }
+  }
+  
+  private func handleNowPlayingResponse(_ response: MovieResponse) {
+    totalPages = response.totalPages
+    nowPlayingMovies = response.results
+  }
+  
+  private func handlePopularResponse(_ response: PopularMoviesResponse) {
+    popularMovies = response.results
+  }
+  
   func fetchAllMovies() {
-    fetchNowPlaying()
-    fetchPopularMovies()
+    self.fetchNowPlaying()
+    self.fetchPopularMovies()
   }
 }

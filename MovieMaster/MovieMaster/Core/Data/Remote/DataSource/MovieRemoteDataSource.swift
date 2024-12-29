@@ -29,15 +29,33 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
   
   func getPopular() -> AnyPublisher<PopularMoviesResponse, Error> {
     return apiClient.getPopular()
-      .map(mapToPopularResponse)
+      .handleEvents(receiveSubscription: { _ in
+        Debug.log("🔄 [RemoteDataSource] Starting API call")
+      }, receiveOutput: { response in
+        Debug.log("📥 [RemoteDataSource] Raw API Response: \(response)")
+      })
+      .map { [weak self] response -> PopularMoviesResponse in
+        guard let self = self else {
+          Debug.log("⚠️ [RemoteDataSource] Self is nil during mapping")
+          return PopularMoviesResponse(results: [], totalPage: 0)
+        }
+        
+        let mappedResponse = self.mapToPopularResponse(response)
+        Debug.log("🔄 [RemoteDataSource] Mapped response: \(mappedResponse.results.count) items")
+        return mappedResponse
+      }
       .eraseToAnyPublisher()
   }
   
   private func mapToPopularResponse(_ response: Popular) -> PopularMoviesResponse {
-    let movies = response.results.compactMap(mapToPopular)
+    let movies = response.results?.compactMap { movie -> PopularResult? in
+      Debug.log("🎬 [RemoteDataSource] Mapping movie: \(movie.title ?? "")")
+      return mapToPopular(movie)
+    }
+    Debug.log("✅ [RemoteDataSource] Mapped \(String(describing: movies?.count)) movies successfully")
     return PopularMoviesResponse(
-      results: movies,
-      totalPage: response.totalPages
+      results: movies ?? [],
+      totalPage: response.totalPages ?? 0
     )
   }
   
@@ -62,7 +80,8 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
   }
   
   private func mapToPopular(_ result: PopularResult) -> PopularResult? {
-    return PopularResult(
+    // Now we can use the custom initializer directly
+    let mapped = PopularResult(
       adult: result.adult,
       backdropPath: result.backdropPath,
       genreIDS: result.genreIDS,
@@ -78,5 +97,8 @@ class DefaultMovieRemoteDataSource: MovieRemoteDataSource {
       voteAverage: result.voteAverage,
       voteCount: result.voteCount
     )
+    
+    Debug.log("✅ Successfully mapped popular result for ID: \(mapped.id ?? 0)")
+    return mapped
   }
 }

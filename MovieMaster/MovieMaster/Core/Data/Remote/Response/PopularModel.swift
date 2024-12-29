@@ -9,32 +9,66 @@ import Foundation
 
 // MARK: - Popular
 struct Popular: Codable {
-  var page: Int
-  var results: [PopularResult]
-  var totalPages, totalResults: Int
+  var page: Int?
+  var results: [PopularResult]?
+  var totalPages, totalResults: Int?
   
   enum CodingKeys: String, CodingKey {
-    case page
-    case results
+    case page, results
     case totalPages = "total_pages"
     case totalResults = "total_results"
   }
 }
 
 // MARK: - Result
-struct PopularResult: Codable {
-  var adult: Bool
-  var backdropPath: String
-  var genreIDS: [Int]
-  var id: Int
-  var originalLanguage: OriginalLanguage
-  var originalTitle: String
-  var overview: String
-  var popularity: Double
-  var posterPath, releaseDate, title: String
-  var video: Bool
-  var voteAverage: Double
-  var voteCount: Int
+struct PopularResult: Codable, Hashable {
+  let adult: Bool?
+  let backdropPath: String?
+  let genreIDS: [Int]?
+  let id: Int?
+  let originalLanguage: String?
+  let originalTitle: String?
+  let overview: String?
+  let popularity: Double?
+  let posterPath: String?
+  let releaseDate: String?
+  let title: String?
+  let video: Bool?
+  let voteAverage: Double?
+  let voteCount: Int?
+  
+  // Add initializer
+  init(
+    adult: Bool? = nil,
+    backdropPath: String? = nil,
+    genreIDS: [Int]? = nil,
+    id: Int? = nil,
+    originalLanguage: String? = nil,
+    originalTitle: String? = nil,
+    overview: String? = nil,
+    popularity: Double? = nil,
+    posterPath: String? = nil,
+    releaseDate: String? = nil,
+    title: String? = nil,
+    video: Bool? = nil,
+    voteAverage: Double? = nil,
+    voteCount: Int? = nil
+  ) {
+    self.adult = adult
+    self.backdropPath = backdropPath
+    self.genreIDS = genreIDS
+    self.id = id
+    self.originalLanguage = originalLanguage
+    self.originalTitle = originalTitle
+    self.overview = overview
+    self.popularity = popularity
+    self.posterPath = posterPath
+    self.releaseDate = releaseDate
+    self.title = title
+    self.video = video
+    self.voteAverage = voteAverage
+    self.voteCount = voteCount
+  }
   
   enum CodingKeys: String, CodingKey {
     case adult
@@ -43,10 +77,12 @@ struct PopularResult: Codable {
     case id
     case originalLanguage = "original_language"
     case originalTitle = "original_title"
-    case overview, popularity
+    case overview
+    case popularity
     case posterPath = "poster_path"
     case releaseDate = "release_date"
-    case title, video
+    case title
+    case video
     case voteAverage = "vote_average"
     case voteCount = "vote_count"
   }
